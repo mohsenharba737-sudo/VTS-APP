@@ -1,5 +1,6 @@
 const { useState, useEffect } = React;
 
+// الرابط للـ API يبقى كما هو
 const API_BASE = "http://127.0.0.1:5000/api";
 
 function App() {
@@ -170,7 +171,6 @@ function App() {
     }
   });
 
-  // فلتر سجل الحركات
   const filteredLogs = logs.filter(l => {
     if(!logSearchText) return true;
     const t = logSearchText.trim().toLowerCase();
@@ -273,7 +273,7 @@ function App() {
         <div className="card glass">
           <h3>📜 سجل الحركات</h3>
 
-          {/* فلتر سجل الحركات */}
+          {/* فلتر سجل الحركات */} 
           <div className="filters-row">
             <select value={logFilterField} onChange={e=>setLogFilterField(e.target.value)}>
               <option value="all">كل الحقول</option>
@@ -318,7 +318,7 @@ function App() {
       <div className="app-shell">
         <header className="app-header glass">
           <div className="logo-header">
-            <img src="/static/logo.png" alt="Logo" className="app-logo" />
+            <img src="logo.png" alt="Logo" className="app-logo" />
             <h1 className="logo-text">ميناء اللاذقية</h1>
           </div>
 

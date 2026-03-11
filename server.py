@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 import pandas as pd
+import os
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+# جميع الملفات في مجلد التطبيق الأساسي root
+app = Flask(__name__)
 CORS(app)
 
 # المستخدمين
@@ -17,7 +19,6 @@ logs = []
 obs_id = 1
 user_id = 2
 
-
 def add_log(username, action, details=""):
     logs.append({
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -26,11 +27,15 @@ def add_log(username, action, details=""):
         "details": details
     })
 
-
+# إرسال index.html من root
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return send_from_directory(os.getcwd(), "index.html")
 
+# إرسال الملفات الثابتة (CSS، JS، الصور) من root
+@app.route("/<path:filename>")
+def static_files(filename):
+    return send_from_directory(os.getcwd(), filename)
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -46,11 +51,9 @@ def login():
 
     return jsonify({"success": False}), 401
 
-
 @app.route("/api/observations")
 def get_observations():
     return jsonify(observations)
-
 
 @app.route("/api/add-observation", methods=["POST"])
 def add_observation():
@@ -70,8 +73,6 @@ def add_observation():
     obs_id += 1
     return jsonify({"success": True})
 
-
-# استيراد Excel
 @app.route("/api/import-excel", methods=["POST"])
 def import_excel():
     global obs_id
@@ -82,7 +83,6 @@ def import_excel():
     file = request.files["file"]
 
     try:
-
         # قراءة الملف (العناوين في الصف الثالث)
         df = pd.read_excel(file, header=2)
 
@@ -92,7 +92,6 @@ def import_excel():
         imported = 0
 
         for _, row in df.iterrows():
-
             date = row["التاريخ"]
             employee = row["اسم الموظف"]
             time = row["الساعة"]
@@ -129,11 +128,9 @@ def import_excel():
             "msg": str(e)
         }), 400
 
-
 @app.route("/api/users")
 def get_users():
     return jsonify(vts_users)
-
 
 @app.route("/api/add-user", methods=["POST"])
 def add_user():
@@ -153,8 +150,6 @@ def add_user():
 
     return jsonify({"success": True, "user": user})
 
-
-# إضافة endpoint لحذف المستخدم
 @app.route("/api/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     global vts_users
@@ -166,11 +161,9 @@ def delete_user(user_id):
     add_log("system", "حذف مستخدم", f"{user_to_delete['username']}")
     return jsonify({"success": True})
 
-
 @app.route("/api/logs")
 def get_logs():
     return jsonify(logs)
-
 
 if __name__ == "__main__":
     app.run(debug=True)

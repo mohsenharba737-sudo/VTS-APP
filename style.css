@@ -66,7 +66,8 @@ body {
 .app-shell {
   position: relative;
   min-height: 100vh;
-  background: url('/static/logo.png') no-repeat center center;
+  /* تعديل المسار ليشير إلى logo.png في root */
+  background: url('logo.png') no-repeat center center;
   background-size: cover; /* يملأ الشاشة بالكامل */
   overflow: hidden;
   padding: 20px;
