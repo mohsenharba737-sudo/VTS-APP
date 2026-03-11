@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>نظام مراقبة الحركة البحرية VTS</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+<!-- أيقونة المتصفح -->
+<link rel="icon" href="/static/logo.png">
+
+<!-- السماح للمتصفح بالتعامل مع CORS -->
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+<!-- React -->
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+<!-- Babel لتشغيل JSX -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- رسالة تحذير عند حدوث خطأ 405 أو 404 -->
+<script type="text/javascript">
+  const originalError = console.error;
+  console.error = (...args) => {
+    if(args[0] && typeof args[0] === 'string' && (args[0].includes('405') || args[0].includes('404'))) {
+      alert('خطأ في طلب API: تحقق من طريقة HTTP ونقاط النهاية.');
+    }
+    originalError(...args);
+  };
+</script>
+
+</head>
+
+<body>
+
+<!-- التطبيق -->
+<div id="root"></div>
+
+<!-- ملف React -->
+<script type="text/babel" src="/static/app.jsx"></script>
+
+</body>
+</html>
