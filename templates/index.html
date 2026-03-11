@@ -22,6 +22,9 @@
 <!-- Babel لتشغيل JSX -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+<!-- Pyodide لتشغيل Python في المتصفح -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+
 <!-- رسالة تحذير عند حدوث خطأ 405 أو 404 -->
 <script type="text/javascript">
   const originalError = console.error;
@@ -40,8 +43,35 @@
 <!-- التطبيق -->
 <div id="root"></div>
 
+<!-- زر لتشغيل Python -->
+<button id="runPython" style="margin:10px;padding:5px 10px;">تشغيل Python</button>
+<pre id="pythonOutput"></pre>
+
 <!-- ملف React -->
 <script type="text/babel" src="/static/app.jsx"></script>
+
+<!-- سكربت لتشغيل Python -->
+<script type="text/javascript">
+async function runPython() {
+    // تحميل Pyodide
+    const pyodide = await loadPyodide();
+
+    // كود Python الذي تريد تشغيله
+    const pythonCode = `
+def greet():
+    return "Python يعمل في المتصفح!"
+
+greet()
+`;
+
+    // تشغيل الكود وإظهار النتيجة
+    const result = await pyodide.runPythonAsync(pythonCode);
+    document.getElementById("pythonOutput").textContent = result;
+}
+
+// ربط الزر مع الدالة
+document.getElementById("runPython").onclick = runPython;
+</script>
 
 </body>
 </html>
